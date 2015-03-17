@@ -63,8 +63,16 @@ func (queue *BufferedQueue) Start() error {
 }
 
 // Put writes the payload to the buffer
-func (queue *BufferedQueue) Put(payload string) error {
+func (queue *BufferedQueue) Put(payload []byte) error {
 	p := &Package{CreatedAt: time.Now(), Payload: payload, Queue: queue}
+	queue.Buffer <- p
+	queue.flushCommand <- true
+	return nil
+}
+
+// Put writes the payload to the buffer
+func (queue *BufferedQueue) PutString(payload string) error {
+	p := &Package{CreatedAt: time.Now(), Payload: []byte(payload), Queue: queue}
 	queue.Buffer <- p
 	queue.flushCommand <- true
 	return nil

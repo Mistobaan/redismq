@@ -9,7 +9,7 @@ import (
 
 // Package provides headers and handling functions around payloads
 type Package struct {
-	Payload    string
+	Payload    []byte
 	CreatedAt  time.Time
 	Queue      interface{} `json:"-"`
 	Consumer   *Consumer   `json:"-"`
@@ -19,9 +19,9 @@ type Package struct {
 	//wellle suggested error headers for failed packages
 }
 
-func unmarshalPackage(input string, queue *Queue, consumer *Consumer) (*Package, error) {
+func unmarshalPackage(input []byte, queue *Queue, consumer *Consumer) (*Package, error) {
 	p := &Package{Queue: queue, Consumer: consumer, Acked: false}
-	err := json.Unmarshal([]byte(input), p)
+	err := json.Unmarshal(input, p)
 	if err != nil {
 		return nil, err
 	}

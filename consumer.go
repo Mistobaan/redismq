@@ -207,7 +207,7 @@ func (consumer *Consumer) parseRedisAnswer(answer *redis.StringCmd) (*Package, e
 	if answer.Err() != nil {
 		return nil, answer.Err()
 	}
-	p, err := unmarshalPackage(answer.Val(), consumer.Queue, consumer)
+	p, err := unmarshalPackage([]byte(answer.Val()), consumer.Queue, consumer)
 	if err != nil {
 		return nil, err
 	}
